@@ -2,10 +2,10 @@
 
 # Cross Compile
 
-This project use `GCC 15.2.0` with Binutils `2.45`. Follow the
-instructions in order to succefully build them.
+This project uses `GCC 15.2.0` with Binutils `2.45`. Follow the
+instructions to compile it successfully.
 
-## Define enviroment variables in your shell:
+## Set environment variables in your shell:
 
 ```shell
 export PREFIX="path/to/folder"
@@ -42,6 +42,9 @@ and extract.
 
 
 Create a folder:
+
+
+Note: I was unable to compile gcc the same way as binutils, it was necessary to create a folder outside the gcc directory for everything to work correctly.
 
 ```
 mkdir build-gcc
