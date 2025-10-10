@@ -1,31 +1,38 @@
-/* Entry point for bootloader to look */
 ENTRY(_start)
-
 SECTIONS
 {
-	. = 2M;
+	/* The Kernel live at 3GB + 1MB in the virtual address space */
+	/* Wiil be mapped to 1MB in the physical address space*/
+	base_address = 0xC0000000;
+	. = 1M + base_address;
 
-        /* Multi boot header */
-	.text BLOCK(4K) : ALIGN(4K)
+ 	kernel_virt_start = .;
+ 	kernel_phys_start = kernel_virt_start - base_address;
+
+	.text ALIGN(4K) : AT(ADDR(.text) - base_address)
 	{
 		*(.multiboot)
 		*(.text)
 	}
 
-	.rodata BLOCK(4K) : ALIGN(4K)
+	/* align read-only data */
+	.rodata ALIGN(4K) : AT(ADDR(.rodata) - base_address)
 	{
 		*(.rodata)
 	}
-
-	.data BLOCK(4K) : ALIGN(4K)
+	
+	.data ALIGN(4K) : AT(ADDR(.data) - base_address)
 	{
 		*(.data)
 	}
 
-	.bss BLOCK(4K) : ALIGN(4K)
+	.bss ALIGN(4K) : AT(ADDR(.bss) - base_address)
 	{
 		*(COMMON)
 		*(.bss)
 	}
 
+	/* Add symbols that indicate the end*/
+	kernel_virt_end = .;
+	kernel_phys_end = kernel_virt_end - base_address;
 }
